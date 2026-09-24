@@ -1,10 +1,10 @@
 # IP Check APIs
 
-精选 **131 个**公开的「查询访问者出口 IP」API，全部经过真实环境实测验证。
+精选 **129 个**公开的「查询访问者出口 IP」API，全部经过真实环境实测验证。
 
-> **验证方式**：`curl -sL`（超时 12s）走真实代理链路请求，判据为 **HTTP 200 且响应中返回的 IP 与已知真实出口 IP 完全一致** —— 这条判据能剔除「返回占位符 IP」「返回自身服务器 IP」「返回 DNS 解析器 IP」等常见假阳性。
+> **验证方式**：`curl -sL`（超时 12s）走真实代理链路请求，严格判据为 **HTTP 200 且响应中返回的 IP 与已知真实出口 IP 完全一致** —— 这条判据能剔除「返回占位符 IP」「返回自身服务器 IP」「返回 DNS 解析器 IP」等常见假阳性。
 >
-> **验证日期**：2026-09-24 · 共 158 个候选，最终收录 131 个，淘汰 26 个（见文末）
+> **验证日期**：2026-09-24 · 共 158 个候选，最终收录 129 个，淘汰 28 个（见文末）
 
 ## 快速开始
 
@@ -43,7 +43,7 @@ curl -s https://myip.ipip.net
 
 ## Full list
 
-**131** endpoints, all verified: HTTP 200 and the returned IP matched the known real egress IP.
+**129** endpoints, all verified: HTTP 200 and the returned IP matched the known real egress IP.
 
 ### 响应体直接就是 IP 字符串  /  plain text (body IS the IP)  (48)
 
@@ -98,13 +98,13 @@ curl -s https://myip.ipip.net
 | 47 | https://myip.ipip.net | - | 🇨🇳 local ISP egress |
 | 48 | https://ddns.oray.com/checkip | - | 🇨🇳 local ISP egress |
 
-### JSON，含明确的 IP 字段  /  JSON (explicit IP field)  (49)
+### JSON，含明确的 IP 字段  /  JSON (explicit IP field)  (48)
 
 | # | URL | IP field | Note |
 |---|-----|----------|------|
 | 1 | https://ifconfig.me/all.json | `ip_addr` |  |
 | 2 | https://ifconfig.co/json | `ip` |  |
-| 3 | https://ifconfig.io/all.json | `forwarded` |  |
+| 3 | https://ifconfig.io/all.json | `forwarded` | 同域多请求易触发限流 |
 | 4 | https://ifconfig.es/json | `ip` |  |
 | 5 | https://api.ipify.org?format=json | `ip` |  |
 | 6 | https://api4.ipify.org?format=json | `ip` |  |
@@ -147,10 +147,9 @@ curl -s https://myip.ipip.net
 | 43 | https://myip.wtf/json | `YourFuckingIPAddress` |  |
 | 44 | https://ipconfig.io/json | `ip` |  |
 | 45 | https://www.trackip.net/ip?json | `IP` |  |
-| 46 | https://ip-api.com/json/ | `query` |  |
-| 47 | http://ip-api.com/json/ | `query` | 免费版仅 http |
-| 48 | https://myip.ipip.net/json | `data.ip` | 🇨🇳 local ISP egress |
-| 49 | https://whois.pconline.com.cn/ipJson.jsp?json=true | `ip` | 🇨🇳 local ISP egress |
+| 46 | http://ip-api.com/json/ | `query` | 免费版仅 http，https 返回 403 |
+| 47 | https://myip.ipip.net/json | `data.ip` | 🇨🇳 local ISP egress |
+| 48 | https://whois.pconline.com.cn/ipJson.jsp?json=true | `ip` | 🇨🇳 local ISP egress |
 
 ### Cloudflare cdn-cgi/trace，key=value 文本，IP 在 ip= 行  /  Cloudflare cdn-cgi/trace (key=value, IP on the ip= line)  (10)
 
@@ -167,12 +166,12 @@ curl -s https://myip.ipip.net
 | 9 | https://cdn.jsdelivr.net/cdn-cgi/trace | - |  |
 | 10 | https://cdnjs.cloudflare.com/cdn-cgi/trace | - |  |
 
-### HTML 页面，IP 嵌在正文/标题中，需正则提取  /  HTML page (IP embedded, needs regex extraction)  (15)
+### HTML 页面，IP 嵌在正文/标题中，需正则提取  /  HTML page (IP embedded, needs regex extraction)  (14)
 
 | # | URL | IP field | Note |
 |---|-----|----------|------|
 | 1 | https://ifconfig.me | - |  |
-| 2 | https://ifconfig.io | - |  |
+| 2 | https://ifconfig.io | - | 同域多请求易触发限流 |
 | 3 | https://ifconfig.pro | - | IP 在 title 中 |
 | 4 | https://ifconfig.icu | - |  |
 | 5 | https://ip.me | - |  |
@@ -182,10 +181,9 @@ curl -s https://myip.ipip.net
 | 9 | https://ipconfig.io | - |  |
 | 10 | https://ip.lafibre.info | - |  |
 | 11 | https://checkip.dyndns.com | - | 正文 Current IP Address: x.x.x.x |
-| 12 | http://checkip.dyndns.org | - | 正文 Current IP Address: x.x.x.x |
-| 13 | http://monip.org | - |  |
-| 14 | https://browserleaks.com/ip | - |  |
-| 15 | https://cip.cc | - | 🇨🇳 local ISP egress |
+| 12 | http://monip.org | - |  |
+| 13 | https://browserleaks.com/ip | - |  |
+| 14 | https://cip.cc | - | 🇨🇳 local ISP egress |
 
 ### XML 格式  /  XML  (3)
 
@@ -222,11 +220,20 @@ curl -s https://myip.ipip.net
 
 ## 自动体检
 
-仓库自带体检脚本，随时复验这 131 个接口的可用性：
+仓库自带体检脚本，随时复验这 129 个接口的可用性：
 
 ```powershell
-# Windows PowerShell
+# Windows PowerShell —— 检查全部
 ./scripts/check-apis.ps1
+
+# 只检查某一类响应格式
+./scripts/check-apis.ps1 -Group json
+
+# 严格模式：要求响应中必须出现你自己的真实出口 IP（推荐，可排除假阳性）
+./scripts/check-apis.ps1 -Expected 203.0.113.7
+
+# 调整超时（默认 12 秒）
+./scripts/check-apis.ps1 -TimeoutSec 20
 ```
 
 ```bash
@@ -237,19 +244,29 @@ bash scripts/check-apis.sh
 输出示例：
 
 ```
- 1 [OK] 200  ip=203.0.113.7   https://icanhazip.com
- 2 [OK] 200  ip=203.0.113.7   https://ipv4.icanhazip.com
- ...
-SUMMARY: 131/131 OK
+IP Check APIs health check  2026-09-24 13:55:24
+source: D:\AI\ip-check-apis\scripts\..\apis.json
+mode: strict (expect 203.0.113.7)   endpoints: 3
+------------------------------------------------------------------------------
+  1 [OK] 200  ip=203.0.113.7       https://api.ipify.org?format=xml
+  2 [OK] 200  ip=203.0.113.7       https://ipwhois.app/xml/
+  3 [OK] 200  ip=203.0.113.7       https://api.ipquery.io/?format=xml
+------------------------------------------------------------------------------
+SUMMARY: 3 / 3 OK
 ```
 
-> 脚本判据：HTTP 200 且响应体中出现合法 IPv4。若要更严格（排除返回占位符的接口），请核对返回的 IP 是否等于你自己的真实出口 IP。
+> - 默认判据：HTTP 200 且响应体中出现合法 IPv4。这只能证明「接口活着」，**不能排除返回占位符 IP 的接口**。
+> - `-Expected <你的真实出口 IP>` 才是严格判据：要求响应体必须包含该 IP。建议实际使用时用严格模式。
+> - 依赖 `curl.exe`（Windows 10 1803+ 自带），缺失时脚本会明确报错。
+> - 部分站点对同一来源的高频请求会限流（例如连续请求 `ifconfig.io` 的 3 个端点），单次批量体检中偶发失败属正常，隔一会儿重试即可。
 
-## 已淘汰名单（26 个，实测不过关，避免踩坑）
+## 已淘汰名单（28 个，实测不过关，避免踩坑）
 
 | URL | Reason |
 |-----|--------|
 | https://ipapi.co/json/ | Cloudflare 403 challenge (改用 ipapi.co/ip/ 正常) |
+| https://ip-api.com/json/ | 恒定 403，免费版仅支持 http (改用 http://ip-api.com/json/) |
+| http://checkip.dyndns.org | 恒定无响应 (改用 https://checkip.dyndns.com 正常) |
 | https://api.myip.com | connection failed |
 | https://ip.useragentinfo.com/json | connection failed |
 | https://qifu-api.baidubce.com/ip/local/geo/v1/district | 404 |
