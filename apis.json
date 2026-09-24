@@ -1,0 +1,38 @@
+{
+  "name": "ip-check-apis",
+  "description": "Curated list of public IP-check / geolocation APIs, verified 2026-09-24 via curl (HTTP 200 + IP parsed)",
+  "updated": "2026-09-24",
+  "apis": [
+    { "id": 1,  "group": "plain-text", "url": "https://icanhazip.com",                        "format": "text", "notes": "Cloudflare 运维，极简" },
+    { "id": 2,  "group": "plain-text", "url": "https://ipecho.net/plain",                     "format": "text", "notes": "" },
+    { "id": 3,  "group": "plain-text", "url": "https://ident.me",                             "format": "text", "notes": "" },
+    { "id": 4,  "group": "plain-text", "url": "https://checkip.amazonaws.com",                "format": "text", "notes": "AWS 官方，极稳定" },
+    { "id": 5,  "group": "json-simple", "url": "https://api.ipify.org?format=json",           "format": "json", "field": "ip", "notes": "" },
+    { "id": 6,  "group": "json-simple", "url": "https://api64.ipify.org?format=json",         "format": "json", "field": "ip", "notes": "v4/v6 双栈出口" },
+    { "id": 7,  "group": "json-simple", "url": "https://jsonip.com",                          "format": "json", "field": "ip", "notes": "" },
+    { "id": 8,  "group": "json-simple", "url": "https://httpbin.org/ip",                      "format": "json", "field": "origin", "notes": "" },
+    { "id": 9,  "group": "json-simple", "url": "https://api.ip.sb/jsonip",                    "format": "json", "field": "ip", "notes": "" },
+    { "id": 10, "group": "json-simple", "url": "https://api.iplocation.net/?cmd=get-ip",      "format": "json", "field": "ip", "notes": "" },
+    { "id": 11, "group": "json-simple", "url": "https://check.torproject.org/api/ip",         "format": "json", "field": "IP", "notes": "附带 IsTor 判断" },
+    { "id": 12, "group": "json-rich", "url": "https://ipinfo.io/json",                        "format": "json", "fields": ["ip", "hostname", "city", "region", "country", "org", "timezone"], "notes": "最常用" },
+    { "id": 13, "group": "json-rich", "url": "https://ipwho.is/",                             "format": "json", "fields": ["ip", "type", "country", "city", "connection.isp"], "notes": "字段全" },
+    { "id": 14, "group": "json-rich", "url": "https://ifconfig.co/json",                      "format": "json", "fields": ["ip", "country", "city", "asn_org", "hosting"], "notes": "含数据中心 IP 判定" },
+    { "id": 15, "group": "json-rich", "url": "https://ifconfig.me/all.json",                  "format": "json", "fields": ["ip_addr", "user_agent"], "notes": "请求头回显" },
+    { "id": 16, "group": "json-rich", "url": "https://api.ip.sb/geoip",                       "format": "json", "fields": ["region", "isp", "asn", "country_code"], "notes": "" },
+    { "id": 17, "group": "json-rich", "url": "https://ipleak.net/json/",                      "format": "json", "fields": ["isp_name", "as_number", "country_code"], "notes": "" },
+    { "id": 18, "group": "json-rich", "url": "https://get.geojs.io/v1/ip/geo.json",           "format": "json", "fields": ["ip", "city", "country", "asn"], "notes": "准确度高" },
+    { "id": 19, "group": "json-rich", "url": "https://api.ipquery.io/?format=json",           "format": "json", "fields": ["ip", "isp", "risk"], "notes": "分层返回" },
+    { "id": 20, "group": "chinese", "url": "https://myip.ipip.net",                           "format": "text", "notes": "中文文本：当前 IP：x.x.x.x 来自于：..." },
+    { "id": 21, "group": "json-rich", "url": "https://reallyfreegeoip.org/json/",             "format": "json", "fields": ["ip", "country_code", "country_name", "city", "time_zone"], "notes": "适合做代理分流规则命中探针" }
+  ],
+  "rejected": [
+    { "url": "https://ipapi.co/json/", "reason": "Cloudflare 403 challenge" },
+    { "url": "https://api.myip.com", "reason": "connection failed" },
+    { "url": "https://ip.useragentinfo.com/json", "reason": "connection failed" },
+    { "url": "https://qifu-api.baidubce.com/ip/local/geo/v1/district", "reason": "404" },
+    { "url": "https://api.vore.top/api/IPdata", "reason": "server error (Redis MISCONF)" },
+    { "url": "https://ip-fast.com/api/ip/?format=json", "reason": "302 redirect, no content" },
+    { "url": "https://freeipapi.com/api/json", "reason": "307 redirect, no content" },
+    { "url": "https://api.my-ip.io/v2/ip.json", "reason": "unstable (timeout in one round)" }
+  ]
+}
